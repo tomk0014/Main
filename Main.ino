@@ -9,13 +9,25 @@
 #include "CJMCU6814.h"
 #include "SGP30.h"
 #include "RH4502C.h"
-#define DHT_PIN 2
+
+// DHT11
+#define DHT_PIN1 2 // Use DHT_PIN1 for the first DHT11 sensor
+#define DHT_PIN2 3 // Define a separate name, DHT_PIN2, for the second DHT11 sensor
 #define DHT_TYPE DHT11
+DHT11Sensor dhtSensor(DHT_PIN1, DHT_TYPE); // Create the first sensor instance
+DHT11Sensor dhtSensor2(DHT_PIN2, DHT_TYPE); // Create the second sensor instance
+
+// HCSR04
+HCSR04 hcsr04_1(12, 13);
+HCSR04 hcsr04_2(10, 11);
+HCSR04 hcsr04_3(8, 9);
+HCSR04 hcsr04_4(6, 7);
 
 #define SENSOR_PIN_COUNT 5
 int sensorPins[SENSOR_PIN_COUNT] = {A8, A9, A10, A11, A12};
 #define TDS_SENSOR_PIN A7
 
+// CJMCU6814
 #define NO2_PIN A0
 #define NH3_PIN A1
 #define CO_PIN A2
@@ -24,30 +36,24 @@ CJMCU6814 cjmcu6814(NO2_PIN, NH3_PIN, CO_PIN);
 #define NUM_KY018_SENSORS 5
 int ky018Pins[NUM_KY018_SENSORS] = {A8, A9, A10, A11, A12};
 
-#define ONE_WIRE_BUS 8
+// DS18B20
+#define ONE_WIRE_BUS 5
 
 
 // i2C Multi-plex
 #define TCAADDR 0x70
 
 // SGP30
-#define SGP30_CHANNEL 0 // Example channel for BMP280
-// BMP280
-#define BMP280_CHANNEL 1 // Example channel for BMP280
-BMP280Sensor bmpSensor;
-// BMP280
-void tcaSelect(uint8_t i) {
-  if (i > 7) return;
-  Wire.beginTransmission(TCAADDR);
-  Wire.write(1 << i);
-  Wire.endTransmission();  
-}
+#define SGP30_CHANNEL 0
+SGP30 sgp;
 
+// BMP280
+#define BMP280_CHANNEL 1
+BMP280Sensor bmpSensor;
 
 // RH-4502 - Ph sensor
 #define PH_SENSOR_PIN A7
 RH4502C phSensor(PH_SENSOR_PIN);
-
 
 // TIME 
 unsigned long lastSensorReadTime = 0;
@@ -56,9 +62,6 @@ const unsigned long sensorReadInterval = 60000; // 1min
 //const unsigned long sensorReadInterval = 3600000; // 60min
 
 // Sensor objects
-
-DHT11Sensor dhtSensor(DHT_PIN, DHT_TYPE);
-SGP30 sgp;
 KS0429 tdsMeter(TDS_SENSOR_PIN);
 KY018Sensor ky018Sensors[NUM_KY018_SENSORS] = {
     KY018Sensor(ky018Pins[0]),
@@ -69,7 +72,13 @@ KY018Sensor ky018Sensors[NUM_KY018_SENSORS] = {
 };
 DS18B20Sensor mySensor(ONE_WIRE_BUS);
 
-
+// BMP280
+void tcaSelect(uint8_t i) {
+  if (i > 7) return;
+  Wire.beginTransmission(TCAADDR);
+  Wire.write(1 << i);
+  Wire.endTransmission();  
+}
 
 
 void setup() {
@@ -78,22 +87,26 @@ void setup() {
     
     while (!Serial);
     dhtSensor.setup();
-    HCSR04_initialize();
+    dhtSensor2.setup(); // Setup the second DHT11 sensor
+    // Initialize all HCSR04 sensors
+    hcsr04_1.initialize();
+    hcsr04_2.initialize();
+    hcsr04_3.initialize();
+    hcsr04_4.initialize();
     tdsMeter.begin();
     mySensor.begin();
     cjmcu6814.begin();
     
     //Multiplex Sensors 3.3v
-    // Select the SGP30 channel 0 on TCA9548A
     tcaSelect(SGP30_CHANNEL);
     sgp.begin();
-    // Select the BMP280 channel 1 on TCA9548A
     tcaSelect(BMP280_CHANNEL);
     bmpSensor.setup();
 
     phSensor.begin();
 
-}
+} // END setup
+
 
 // Declaration for calculateAbsoluteHumidity
 float calculateAbsoluteHumidity(float temperature, float humidity) {
@@ -104,6 +117,7 @@ float calculateAbsoluteHumidity(float temperature, float humidity) {
     return absoluteHumidity; // Return absolute humidity in g/m^3
 }
 
+
 void loop() {
   unsigned long currentTime = millis();
   if (currentTime - lastSensorReadTime >= sensorReadInterval) {
@@ -111,53 +125,89 @@ void loop() {
     //bmpSensor.loop(); // Assuming loop method updates internal state
 
     dhtSensor.loop(); // Similarly for other sensors
-    HCSR04_measureDistance();
 
     // Read temperature and humidity from DHT11
     float temperature = dhtSensor.readTemperature();
     float humidity = dhtSensor.readHumidity();
-
-    // Select the channel for the SGP30 sensor
-    //tcaSelect(SGP30_CHANNEL);   EXIST just above outside of the looo
+    float absoluteHumidity = 0; // Initialize with 0
 
     // Ensure valid readings
     if (!isnan(temperature) && !isnan(humidity)) {
-      // Calculate absolute humidity
-      float absoluteHumidity = calculateAbsoluteHumidity(temperature, humidity);
-
-      // Assuming you have a method to set humidity for the SGP30
-      // Convert absolute humidity to the format expected by your SGP30 library if necessary
+      absoluteHumidity = calculateAbsoluteHumidity(temperature, humidity);
+      tcaSelect(SGP30_CHANNEL); // Ensure SGP30 channel is selected before setting humidity
       sgp.setHumidity(absoluteHumidity);
     }
-
-    sendSensorDataToRaspberryPi(); // Initialize Loop function and print output to serial
-  }
-}
-
-
-
-
-
-
-void sendSensorDataToRaspberryPi() {
   
+  // HCSR04
+  hcsr04_1.measureDistance();
+  float distance1 = hcsr04_1.getDistance();
+  hcsr04_2.measureDistance();
+  float distance2 = hcsr04_2.getDistance();
+  hcsr04_3.measureDistance();
+  float distance3 = hcsr04_3.getDistance();
+  hcsr04_4.measureDistance();
+  float distance4 = hcsr04_4.getDistance();
+
+    sendSensorDataToRaspberryPi(absoluteHumidity);
+  }
+} // END Loop
+
+
+void sendSensorDataToRaspberryPi(float absoluteHumidity) {
   // DHT11 data
   Serial.print(F("DHT11-Temperature = "));
   Serial.println(dhtSensor.readTemperature()); //Serial.println(" °C");
   Serial.print(F("DHT11-Humidity = "));
-  Serial.println(dhtSensor.readHumidity());//Serial.println(F(" %"));
+  Serial.println(dhtSensor.readHumidity()); //Serial.println(F(" %"));
   
-  
+  // DHT11 data from the second sensor
+  Serial.print(F("DHT11-Temperature2 = "));
+  Serial.println(dhtSensor2.readTemperature());
+  Serial.print(F("DHT11-Humidity2 = "));
+  Serial.println(dhtSensor2.readHumidity());
+
+
   // HCSR04
-    float distance = HCSR04_getDistance();
-  if (distance != -1) { // Check if distance is valid
-    Serial.print("HCSR04-Distance = ");
-    Serial.println(distance); //Serial.println(" cm");
+  // HCSR04 Sensor 1
+  hcsr04_1.measureDistance();
+  float distance1 = hcsr04_1.getDistance();
+  if (distance1 != -1) {
+      Serial.print("HCSR04-1 Distance = ");
+      Serial.println(distance1); // Serial.println(" cm");
   } else {
-    Serial.println("HCSR04-Distance: Out of range");
+      Serial.println("HCSR04-1 Distance: Out of range");
   }
 
-  
+  // HCSR04 Sensor 2
+  hcsr04_2.measureDistance();
+  float distance2 = hcsr04_2.getDistance();
+  if (distance2 != -1) {
+      Serial.print("HCSR04-2 Distance = ");
+      Serial.println(distance2); // Serial.println(" cm");
+  } else {
+      Serial.println("HCSR04-2 Distance: Out of range");
+  }
+
+  // HCSR04 Sensor 3
+  hcsr04_3.measureDistance();
+  float distance3 = hcsr04_3.getDistance();
+  if (distance3 != -1) {
+      Serial.print("HCSR04-3 Distance = ");
+      Serial.println(distance3); // Serial.println(" cm");
+  } else {
+      Serial.println("HCSR04-3 Distance: Out of range");
+  }
+
+  // HCSR04 Sensor 4
+  hcsr04_4.measureDistance();
+  float distance4 = hcsr04_4.getDistance();
+  if (distance4 != -1) {
+      Serial.print("HCSR04-4 Distance = ");
+      Serial.println (distance4); //Serial.println(" cm");
+  } else {
+      Serial.println("HCSR04-4 Distance: Out of range");
+  }
+
   // KY018
   // First, find the minimum resistance to use as a reference
   float minResistance = 1e+37; // Use a very large number to initialize minResistance.
@@ -195,12 +245,11 @@ void sendSensorDataToRaspberryPi() {
   // DS18B20-Water Temperature
   float temperatureC = mySensor.readTemperature(); // Read temperature
   if(temperatureC != DEVICE_DISCONNECTED_C) {
-    Serial.print("DS18B20-Temperature: ");
+    Serial.print("DS18B20-Water-Temperature: ");
     Serial.println(temperatureC);
   } else {
     Serial.println("Error: Could not read temperature data");
   }
-
 
   // Print KS0429-TDS value
   float tdsValue = tdsMeter.readTDS(); // Read TDS value
@@ -214,7 +263,6 @@ void sendSensorDataToRaspberryPi() {
   Serial.println(cjmcu6814.readNH3_ppm());
   Serial.print("CJMCU6814-Carbon-Monoxide(CO) = ");
   Serial.println(cjmcu6814.readCO_ppm());
-  
   
   // SGP30
   // Read temperature and humidity from DHT11 for the SGP30
@@ -230,17 +278,11 @@ void sendSensorDataToRaspberryPi() {
       sgp.setHumidity(absoluteHumidity);
   }
 
-  // Select the channel from the multiplex for SGP30 and initialize
-  tcaSelect(0); // SGP30 is connected to channel 0 (SD0, SC0)
-
-  // Ensure to select the SGP30 channel again if necessary
-  tcaSelect(SGP30_CHANNEL); // Select the SGP30 sensor's channel on the TCA9548A
-
-  // Attempt to perform SGP30 air quality measurement
+  // SGP30 Air Quality Measurement
+  tcaSelect(SGP30_CHANNEL); // Ensure SGP30 channel is selected before reading
   if (!sgp.IAQmeasure()) {
     Serial.println("Failed to perform SGP30 IAQ measurement");
   } else {
-    // If the measurement was successful, read the IAQ data
     uint16_t tvoc_ppb = sgp.getTVOC();
     uint16_t eco2_ppm = sgp.geteCO2();
     Serial.print("SGP30-TVOC = ");
@@ -252,7 +294,6 @@ void sendSensorDataToRaspberryPi() {
   // BMP280  
   // Select the channel for BMP280 and initialize
   tcaSelect(1); // BMP280 is connected to channel 1 (SD1, SC1)
-
   // BMP280 data
   Serial.print(F("BMP280-Temperature = "));
   Serial.println(bmpSensor.readTemperature()); //Serial.println(" °C");
@@ -268,7 +309,6 @@ void sendSensorDataToRaspberryPi() {
   Serial.print("RH4502C-pH = ");
   Serial.println(phValue);
 
-
-}
+} // END sendSensorDataToRaspberryPi()
 
 

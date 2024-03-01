@@ -2,7 +2,7 @@
 
 **********************************************************************
 // Quick start Guide for code architecture
-// 2024-02-27 Version 1.0
+// 2024-03-01 Version 1.1
 // Jason Tomkins
 **********************************************************************
 
@@ -18,35 +18,40 @@ const unsigned long sensorReadInterval = 60000; // 1min
 **********************************************************************
 Sample Output (KY018 Repeats 5times for measuring light):
 
-DHT11-Temperature = 21.80
-DHT11-Humidity = 24.00
-HCSR04-Distance = 9.84
-KY018-1-Voltage = 957.97
-KY018-1-Resistance = 2370.01
-KY018-1-Light Intensity = 98.11
-KY018-2-Voltage = 977.52
-KY018-2-Resistance = 2430.13
-KY018-2-Light Intensity = 95.69
-KY018-3-Voltage = 972.63
-KY018-3-Resistance = 2415.05
-KY018-3-Light Intensity = 96.28
-KY018-4-Voltage = 1524.93
-KY018-4-Resistance = 4428.77
-KY018-4-Light Intensity = 52.50
-KY018-5-Voltage = 1505.38
-KY018-5-Resistance = 4287.71
-KY018-5-Light Intensity = 54.23
-DS18B20-Temperature: 21.00
-KS0429-TotalDissolvedSolids = 7103
-CJMCU6814-Nitrogen-Dioxide(NO2) = 1.00
+DHT11-Temperature = 19.40
+DHT11-Humidity = 21.00
+DHT11-Temperature2 = nan
+DHT11-Humidity2 = nan
+HCSR04-1 Distance = 26.47
+HCSR04-2 Distance: Out of range
+HCSR04-3 Distance: Out of range
+HCSR04-4 Distance: Out of range
+KY018-1-Voltage = 948.19
+KY018-1-Resistance = 2340.17
+KY018-1-Light Intensity = 91.86
+KY018-2-Voltage = 992.18
+KY018-2-Resistance = 2475.61
+KY018-2-Light Intensity = 86.83
+KY018-3-Voltage = 860.22
+KY018-3-Resistance = 2077.92
+KY018-3-Light Intensity = 103.45
+KY018-4-Voltage = 1432.06
+KY018-4-Resistance = 4013.70
+KY018-4-Light Intensity = 53.56
+KY018-5-Voltage = 1432.06
+KY018-5-Resistance = 4032.92
+KY018-5-Light Intensity = 53.30
+DS18B20-Water-Temperature = 23.0 
+KS0429-TotalDissolvedSolids = 640
+CJMCU6814-Nitrogen-Dioxide(NO2) = -19.40
 CJMCU6814-Amonia(NH3) = 2.10
-CJMCU6814-Carbon-Monoxide(CO) = 1.70
-SGP30-TVOC = 1267
-SGP30-eCO2 = 1837
-BMP280-Temperature = 22.28
-BMP280-Pressure = 991.34
-BMP280-Altitude = 313.44
-RH4502C-pH = 7.19
+CJMCU6814-Carbon-Monoxide(CO) = 1.60
+SGP30-TVOC = 1271
+SGP30-eCO2 = 1841
+BMP280-Temperature = 20.15
+BMP280-Pressure = 1015.57
+BMP280-Altitude = 110.71
+RH4502C-pH = 21.51
 
 **********************************************************************
 
@@ -56,7 +61,7 @@ All sensor code follow this directory structure:
 		#include and #define statements
 		setup up objects
 		loop objects
-		Import function: "sendSensorDataToRaspberryPi();" Print Data output and send to Raspberry pi
+		Important function: "sendSensorDataToRaspberryPi();" Print Data output to serial and send to Raspberry pi
 		a few instantiations for objects
 	sensorName.cpp script
 	sensorName.h script
@@ -65,7 +70,7 @@ All sensor code follow this directory structure:
 **********************************************************************
 
 10 Unique Sensors
-29 Data Points
+33 Data Points
 
 Physical Archtecture:
 2 Breadboards:
@@ -83,7 +88,6 @@ Raspberry Pi 4 details:
 	Graphana reads to the data from influx.db displayed on the 5inch touchscreen
 
 **********************************************************************
-	
 Interesting Sensors for better accuracy:
 	The SGP30 inherits the DHTT Humidity value for better accuracy (sensors benefiting each other)
 		SGP30-eC02: equivalent Carbon Dioxide concentration
@@ -91,19 +95,53 @@ Interesting Sensors for better accuracy:
 	The BMP280 inerhiets the DHT11 Temperature value for better accuracy for 1 calculation
 	The BMP280 requires a value to determine approx. altitude "meters above sea-level" for your location.
 	
-	
-		
-
 **********************************************************************
-
-Disclaimer:
-
-A lot of calibration is underway. All sensors are pulling or reading data but the scales and code verification required.
-
-**********************************************************************
+Arduino Mega Pin Configuration for Sensors.
 
 
+*****************************************************
+ANALOGUE
+*****************************************************
 
+N02, NH3 and CO
+CJMCU6814 - Analogue Pin# A0, A1, A2
+
+Ph Sensor
+RH-4502 - Analogue Pin #A7
+
+Light/Resitance/Voltage
+KY018 - Analogue Pin #A8
+KY018 - Analogue Pin #A9
+KY018 - Analogue Pin #A10
+KY018 - Analogue Pin #A11
+KY018 - Analogue Pin #A12
+
+
+*****************************************************
+DIGITAL
+*****************************************************
+
+Temp/Humidity
+DHT11 - Digital Pin #2
+DHT11 - Digital Pin #3
+
+Distance
+HCSR04 - Digital Pin# 12, 13
+HCSR04 - Digital Pin# 10, 11
+HCSR04 - Digital Pin# 8, 9
+HCSR04 - Digital Pin# 6, 7
+
+Water Temp
+DS18B20 - Digital Pin# 5
+
+Multiplex: SDA/SCL
+	VOC, eC02
+	SGP30 - SDA0
+	SGP30 - SCL0
+
+	Temp, Pressure, Altitude
+	BMP280 - SDA1
+	BMP280 - SCL1
 
 
 **********************************************************************
@@ -136,15 +174,10 @@ void loop()
 
 **********************************************************************
 
+Disclaimer:
 
-
-
-
-
-
-
-
-
-
+A lot of calibration is underway. All sensors are pulling or reading data but the scales and code verification required.
 
 **********************************************************************
+
+

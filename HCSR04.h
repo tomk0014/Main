@@ -5,14 +5,17 @@
 
 #include <Arduino.h>
 
-extern int trig;
-extern int echo;
-extern int duration;
-extern float distance;
-extern float meter;
+class HCSR04 {
+  public:
+    HCSR04(int trigPin, int echoPin); // Constructor with pin assignments
+    void initialize();
+    void measureDistance();
+    float getDistance();
 
-void HCSR04_initialize();
-void HCSR04_measureDistance();
-float HCSR04_getDistance();
+  private:
+    int _trigPin;
+    int _echoPin;
+    float _distance;
+};
 
-#endif  // HCSR04_H
+#endif  // HC_SR04_H

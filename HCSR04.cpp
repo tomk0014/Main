@@ -4,29 +4,27 @@
 
 #include "HCSR04.h"
 
-int trig = 6;
-int echo = 7;
-float distance;
+HCSR04::HCSR04(int trigPin, int echoPin) {
+  _trigPin = trigPin;
+  _echoPin = echoPin;
+}
 
-void HCSR04_initialize() {
-  pinMode(trig, OUTPUT);
-  digitalWrite(trig, LOW);
+void HCSR04::initialize() {
+  pinMode(_trigPin, OUTPUT);
+  digitalWrite(_trigPin, LOW);
   delayMicroseconds(2);
-  pinMode(echo, INPUT);
-  // Removed initial Serial.begin(9600) and delay(2000) to streamline operation
+  pinMode(_echoPin, INPUT);
 }
 
-void HCSR04_measureDistance() {
-  digitalWrite(trig, HIGH);
+void HCSR04::measureDistance() {
+  digitalWrite(_trigPin, HIGH);
   delayMicroseconds(10);
-  digitalWrite(trig, LOW);
+  digitalWrite(_trigPin, LOW);
 
-  long duration = pulseIn(echo, HIGH);
-  distance = (duration > 0) ? duration / 58.0 : -1; // -1 indicates out of range
-  // Removed Serial output, delay(20000) to streamline and non-block execution
+  long duration = pulseIn(_echoPin, HIGH);
+  _distance = (duration > 0) ? duration / 58.0 : -1; // -1 indicates out of range
 }
 
-// Consider adding a function to get the last measured distance
-float HCSR04_getDistance() {
-  return distance; // Returns the distance in cm
+float HCSR04::getDistance() {
+  return _distance; // Returns the distance in cm
 }
