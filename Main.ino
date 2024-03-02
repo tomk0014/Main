@@ -172,7 +172,7 @@ void sendSensorDataToRaspberryPi(float absoluteHumidity) {
   hcsr04_1.measureDistance();
   float distance1 = hcsr04_1.getDistance();
   if (distance1 != -1) {
-      Serial.print("HCSR04-1 Distance = ");
+      Serial.print("HCSR04-1-Distance = ");
       Serial.println(distance1); // Serial.println(" cm");
   } else {
       Serial.println("HCSR04-1 Distance: Out of range");
@@ -182,7 +182,7 @@ void sendSensorDataToRaspberryPi(float absoluteHumidity) {
   hcsr04_2.measureDistance();
   float distance2 = hcsr04_2.getDistance();
   if (distance2 != -1) {
-      Serial.print("HCSR04-2 Distance = ");
+      Serial.print("HCSR04-2-Distance = ");
       Serial.println(distance2); // Serial.println(" cm");
   } else {
       Serial.println("HCSR04-2 Distance: Out of range");
@@ -192,7 +192,7 @@ void sendSensorDataToRaspberryPi(float absoluteHumidity) {
   hcsr04_3.measureDistance();
   float distance3 = hcsr04_3.getDistance();
   if (distance3 != -1) {
-      Serial.print("HCSR04-3 Distance = ");
+      Serial.print("HCSR04-3-Distance = ");
       Serial.println(distance3); // Serial.println(" cm");
   } else {
       Serial.println("HCSR04-3 Distance: Out of range");
@@ -202,7 +202,7 @@ void sendSensorDataToRaspberryPi(float absoluteHumidity) {
   hcsr04_4.measureDistance();
   float distance4 = hcsr04_4.getDistance();
   if (distance4 != -1) {
-      Serial.print("HCSR04-4 Distance = ");
+      Serial.print("HCSR04-4-Distance = ");
       Serial.println (distance4); //Serial.println(" cm");
   } else {
       Serial.println("HCSR04-4 Distance: Out of range");
@@ -238,7 +238,7 @@ void sendSensorDataToRaspberryPi(float absoluteHumidity) {
     // Print light intensity percentage
     Serial.print("KY018-");
     Serial.print(i + 1);
-    Serial.print("-Light Intensity = ");
+    Serial.print("-Light-Intensity = ");
     Serial.println(lightIntensityPercentage);
   }
 

@@ -20,27 +20,27 @@ Sample Output (KY018 Repeats 5times for measuring light):
 
 DHT11-Temperature = 19.40
 DHT11-Humidity = 21.00
-DHT11-Temperature2 = nan
-DHT11-Humidity2 = nan
-HCSR04-1 Distance = 26.47
-HCSR04-2 Distance: Out of range
-HCSR04-3 Distance: Out of range
-HCSR04-4 Distance: Out of range
+DHT11-Temperature2 = 21.2
+DHT11-Humidity2 = 19.0
+HCSR04-1-Distance = 26.47
+HCSR04-2-Distance: 30.0
+HCSR04-3-Distance: 42.0
+HCSR04-4-Distance: 18.0
 KY018-1-Voltage = 948.19
 KY018-1-Resistance = 2340.17
-KY018-1-Light Intensity = 91.86
+KY018-1-Light-Intensity = 91.86
 KY018-2-Voltage = 992.18
 KY018-2-Resistance = 2475.61
-KY018-2-Light Intensity = 86.83
+KY018-2-Light-Intensity = 86.83
 KY018-3-Voltage = 860.22
 KY018-3-Resistance = 2077.92
-KY018-3-Light Intensity = 103.45
+KY018-3-Light-Intensity = 103.45
 KY018-4-Voltage = 1432.06
 KY018-4-Resistance = 4013.70
-KY018-4-Light Intensity = 53.56
+KY018-4-Light-Intensity = 53.56
 KY018-5-Voltage = 1432.06
 KY018-5-Resistance = 4032.92
-KY018-5-Light Intensity = 53.30
+KY018-5-Light-Intensity = 53.30
 DS18B20-Water-Temperature = 23.0 
 KS0429-TotalDissolvedSolids = 640
 CJMCU6814-Nitrogen-Dioxide(NO2) = -19.40
