@@ -4,16 +4,6 @@
 // Quick start Guide for code architecture
 // 2024-03-01 Version 1.1
 // Jason Tomkins
-**********************************************************************
-
-Settings available for: Serial Plotter Output frequency(time): 1min or 10min or 60min. uncomment "//" the row in Main.ino as seen below.
-
-// ADJST YOUR TIME in Main.ino
-unsigned long lastSensorReadTime = 0;<br>
-const unsigned long sensorReadInterval = 60000; // 1min<br>
-//const unsigned long sensorReadInterval = 600000; // 10min<br>
-//const unsigned long sensorReadInterval = 3600000; // 60min<br>
-
 
 **********************************************************************
 <h3>Sample Output:</h3>
@@ -54,6 +44,16 @@ BMP280-Altitude = 110.71<br>
 RH4502C-pH = 21.51<br>
 
 **********************************************************************
+Settings available for: Serial Plotter Output frequency(time): 1min or 10min or 60min. uncomment "//" the row in Main.ino as seen below.
+
+// ADJST YOUR TIME in Main.ino
+unsigned long lastSensorReadTime = 0;<br>
+const unsigned long sensorReadInterval = 60000; // 1min<br>
+//const unsigned long sensorReadInterval = 600000; // 10min<br>
+//const unsigned long sensorReadInterval = 3600000; // 60min<br>
+
+**********************************************************************
+
 
 <h3>The Code is modular:</h3>
 All sensor code follow this directory structure:<br>
@@ -109,8 +109,8 @@ Arduino Mega Pin Configuration for Sensors.
 N02, NH3 and CO Sensor<br>
 CJMCU6814 - 5Volt - Analogue Pin# A0, A1, A2<br>
 
-Ph Sensor<br>
-RH-4502 - 5Volt - Analogue Pin #A5<br>
+pH Sensor<br>
+RH4502 - 5Volt - Analogue Pin #A5<br>
 
 TDS Sensor<br>
 KS0429 - 3.3Volt - Analogue Pin #A7<br>
@@ -129,7 +129,7 @@ Light/Resitance/Voltage<br>
 *****************************************************
 
 Temp/Humidity
-DHT11 - 3.3Volt - Digital Pin #2
+DHT11 - 3.3Volt - Digital Pin #2<br>
 DHT11 - 3.3Volt - Digital Pin #3
 
 Distance
@@ -144,8 +144,8 @@ Water Temp
 DS18B20 - 5Volt - Digital Pin# 5<br>
 
 Multiplex - 3.3Volt - SDA/SCL<br>
-<ul>
 VOC and eC02 Sensor
+<ul>
 <li>SGP30 - SDA0
 <li>SGP30 - SCL0
 </ul>
