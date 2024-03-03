@@ -18,8 +18,8 @@ const unsigned long sensorReadInterval = 60000; // 1min
 **********************************************************************
 Sample Output (KY018 Repeats 5times for measuring light):
 
-DHT11-Temperature = 19.40
-DHT11-Humidity = 21.00
+DHT11-Temperature = 19.40<br>
+DHT11-Humidity = 21.00<br>
 DHT11-Temperature2 = 21.2
 DHT11-Humidity2 = 19.0
 HCSR04-1-Distance = 26.47
@@ -104,20 +104,20 @@ ANALOGUE
 *****************************************************
 
 N02, NH3 and CO
-CJMCU6814 - Analogue Pin# A0, A1, A2
+CJMCU6814 - 5Volt - Analogue Pin# A0, A1, A2
 
 Ph Sensor
-RH-4502 - Analogue Pin #A5
+RH-4502 - 5Volt - Analogue Pin #A5
 
 TDS Sensor
-KS0429 - Analogue Pin #A7
+KS0429 - 3.3Volt - Analogue Pin #A7
 
 Light/Resitance/Voltage
-KY018 - Analogue Pin #A8
-KY018 - Analogue Pin #A9
-KY018 - Analogue Pin #A10
-KY018 - Analogue Pin #A11
-KY018 - Analogue Pin #A12
+KY018 - 5Volt - Analogue Pin #A8
+KY018 - 5Volt - Analogue Pin #A9
+KY018 - 5Volt - Analogue Pin #A10
+KY018 - 5Volt - Analogue Pin #A11
+KY018 - 5Volt - Analogue Pin #A12
 
 
 *****************************************************
@@ -125,19 +125,19 @@ DIGITAL
 *****************************************************
 
 Temp/Humidity
-DHT11 - Digital Pin #2
-DHT11 - Digital Pin #3
+DHT11 - 3.3Volt - Digital Pin #2
+DHT11 - 3.3Volt - Digital Pin #3
 
 Distance
-HCSR04 - Digital Pin# 12, 13
-HCSR04 - Digital Pin# 10, 11
-HCSR04 - Digital Pin# 8, 9
-HCSR04 - Digital Pin# 6, 7
+HCSR04 - 5Volt - Digital Pin# 12, 13
+HCSR04 - 5Volt - Digital Pin# 10, 11
+HCSR04 - 5Volt - Digital Pin# 8, 9
+HCSR04 - 5Volt - Digital Pin# 6, 7
 
 Water Temp
-DS18B20 - Digital Pin# 5
+DS18B20 - 5Volt - Digital Pin# 5
 
-Multiplex: SDA/SCL
+Multiplex - 3.3Volt - SDA/SCL
 	VOC, eC02
 	SGP30 - SDA0
 	SGP30 - SCL0
