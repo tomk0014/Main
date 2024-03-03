@@ -52,17 +52,18 @@ SGP30 sgp;
 BMP280Sensor bmpSensor;
 
 // RH-4502 - Ph sensor
-#define PH_SENSOR_PIN A7
+#define PH_SENSOR_PIN A5
 RH4502C phSensor(PH_SENSOR_PIN);
 
 // TIME 
 unsigned long lastSensorReadTime = 0;
-const unsigned long sensorReadInterval = 60000; // 1min
-//const unsigned long sensorReadInterval = 600000; // 10min
+//onst unsigned long sensorReadInterval = 60000; // 1min
+const unsigned long sensorReadInterval = 600000; // 10min
 //const unsigned long sensorReadInterval = 3600000; // 60min
 
 // Sensor objects
 KS0429 tdsMeter(TDS_SENSOR_PIN);
+
 KY018Sensor ky018Sensors[NUM_KY018_SENSORS] = {
     KY018Sensor(ky018Pins[0]),
     KY018Sensor(ky018Pins[1]),
@@ -175,7 +176,7 @@ void sendSensorDataToRaspberryPi(float absoluteHumidity) {
       Serial.print("HCSR04-1-Distance = ");
       Serial.println(distance1); // Serial.println(" cm");
   } else {
-      Serial.println("HCSR04-1 Distance: Out of range");
+      Serial.println("HCSR04-1-Distance = Out of range");
   }
 
   // HCSR04 Sensor 2
@@ -185,7 +186,7 @@ void sendSensorDataToRaspberryPi(float absoluteHumidity) {
       Serial.print("HCSR04-2-Distance = ");
       Serial.println(distance2); // Serial.println(" cm");
   } else {
-      Serial.println("HCSR04-2 Distance: Out of range");
+      Serial.println("HCSR04-2-Distance = Out of range");
   }
 
   // HCSR04 Sensor 3
@@ -195,7 +196,7 @@ void sendSensorDataToRaspberryPi(float absoluteHumidity) {
       Serial.print("HCSR04-3-Distance = ");
       Serial.println(distance3); // Serial.println(" cm");
   } else {
-      Serial.println("HCSR04-3 Distance: Out of range");
+      Serial.println("HCSR04-3-Distance = Out of range");
   }
 
   // HCSR04 Sensor 4
@@ -205,7 +206,7 @@ void sendSensorDataToRaspberryPi(float absoluteHumidity) {
       Serial.print("HCSR04-4-Distance = ");
       Serial.println (distance4); //Serial.println(" cm");
   } else {
-      Serial.println("HCSR04-4 Distance: Out of range");
+      Serial.println("HCSR04-4-Distance = Out of range");
   }
 
   // KY018

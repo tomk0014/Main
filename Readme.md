@@ -107,7 +107,10 @@ N02, NH3 and CO
 CJMCU6814 - Analogue Pin# A0, A1, A2
 
 Ph Sensor
-RH-4502 - Analogue Pin #A7
+RH-4502 - Analogue Pin #A5
+
+TDS Sensor
+KS0429 - Analogue Pin #A7
 
 Light/Resitance/Voltage
 KY018 - Analogue Pin #A8
