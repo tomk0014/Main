@@ -58,15 +58,16 @@ const unsigned long sensorReadInterval = 60000; // 1min<br>
 <h3>The Code is modular:</h3>
 All sensor code follow this directory structure:<br>
 	Main.ino
-  <ul>>
+  <ul>
 	<li>#include and #define statements</li>
 	<li>setup up objects</li>
 	<li>loop objects</li>
 	<li>Important function: "sendSensorDataToRaspberryPi();" Print Data output to serial and send to Raspberry pi</li>
 	<li>a few instantiations for objects</li>
-	<li>sensorName.cpp script</li>
-	<li>sensorName.h script</li>
-  </ul>
+	</ul>
+  sensorName<b>.cpp</b> script<br>
+	sensorName<b>.h</b> script<br>
+  
 
 
 **********************************************************************
