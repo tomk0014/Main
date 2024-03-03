@@ -16,7 +16,7 @@ const unsigned long sensorReadInterval = 60000; // 1min<br>
 
 
 **********************************************************************
-Sample Output (KY018 Repeats 5times for measuring light):
+<h3>Sample Output:</h3>
 
 DHT11-Temperature = 19.40<br>
 DHT11-Humidity = 21.00<br>
@@ -55,16 +55,18 @@ RH4502C-pH = 21.51<br>
 
 **********************************************************************
 
-The Code is modular:
-All sensor code follow this directory structure:
+<h3>The Code is modular:</h3>
+All sensor code follow this directory structure:<br>
 	Main.ino
-		#include and #define statements
-		setup up objects
-		loop objects
-		Important function: "sendSensorDataToRaspberryPi();" Print Data output to serial and send to Raspberry pi
-		a few instantiations for objects
-	sensorName.cpp script
-	sensorName.h script
+  <ul>>
+	<li>#include and #define statements</li>
+	<li>setup up objects</li>
+	<li>loop objects</li>
+	<li>Important function: "sendSensorDataToRaspberryPi();" Print Data output to serial and send to Raspberry pi</li>
+	<li>a few instantiations for objects</li>
+	<li>sensorName.cpp script</li>
+	<li>sensorName.h script</li>
+  </ul>
 
 
 **********************************************************************
@@ -101,7 +103,7 @@ Arduino Mega Pin Configuration for Sensors.
 
 
 *****************************************************
-ANALOGUE
+<h2>ANALOGUE</h2>
 *****************************************************
 
 N02, NH3 and CO Sensor<br>
@@ -123,7 +125,7 @@ Light/Resitance/Voltage<br>
 </ul>
 
 *****************************************************
-DIGITAL
+<h2>DIGITAL</h2>
 *****************************************************
 
 Temp/Humidity
@@ -159,9 +161,9 @@ CALIBRATION SCRIPTS
 **********************************************************************
 
 For the RH-4502C Ph Meter
-// Calibration: Wrap copper around the screw head, plug into 5v VCC and stick a copper wite inside the center/circular sensor.
-// STEP 1 - START CALIBRATION. If VCC = 5.0 Volt, or near VCC = 5V good result.
-// Code BELOW:
+// Calibration: Wrap copper around the screw head, plug into 5v VCC and stick a copper wite inside the center/circular sensor.<br>
+// STEP 1 - START CALIBRATION. If VCC = 5.0 Volt, or near VCC = 5V good result.<br>
+// Code BELOW:<br>
 
 
 int pH_Value; 
@@ -180,11 +182,12 @@ void loop()
    Serial.println(Voltage); 
    delay(500); 
  }
+ <br>
 // END CALIBRATION SCRIPT
 
 **********************************************************************
 
-Disclaimer:
+<h2>Disclaimer:</h2>
 
 A lot of calibration is underway. All sensors are pulling or reading data but the scales and code verification required.
 
